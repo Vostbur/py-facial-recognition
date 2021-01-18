@@ -1,0 +1,12 @@
+version: '2.3'
+
+services:
+  face_recognition:
+    image: py_face_recognition
+    container_name: py_face_recognition
+    working_dir: /py_face_recognition
+    build:
+      context: .
+    command: python3 -u main.py
+    volumes:
+      - ./:/py_face_recognition
