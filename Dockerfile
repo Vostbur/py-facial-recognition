@@ -34,4 +34,4 @@ COPY . /root/py_face_recognition
 RUN cd /root/py_face_recognition && \
     pip3 install -r requirements.txt
 CMD cd /root/py_face_recognition && \
-    python3 main.py
+    python3 manage.py runserver 0.0.0.0:8000
