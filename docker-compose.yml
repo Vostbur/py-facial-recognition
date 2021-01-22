@@ -7,6 +7,8 @@ services:
     working_dir: /py_face_recognition
     build:
       context: .
-    command: python3 -u main.py
+    command: python3 manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
     volumes:
       - ./:/py_face_recognition
