@@ -1,6 +1,7 @@
-FROM python:3.6-slim-stretch
+FROM python:3.8-slim-buster
 
 RUN apt-get -y update
+
 RUN apt-get install -y --fix-missing \
     build-essential \
     cmake \
@@ -22,16 +23,28 @@ RUN apt-get install -y --fix-missing \
     python3-numpy \
     software-properties-common \
     zip \
+    gcc \
+    musl-dev \
+    netcat \
     && apt-get clean && rm -rf /tmp/* /var/tmp/*
 
 RUN cd ~ && \
     mkdir -p dlib && \
-    git clone -b 'v19.9' --single-branch https://github.com/davisking/dlib.git dlib/ && \
+    git clone https://github.com/davisking/dlib.git dlib/ && \
     cd  dlib/ && \
-    python3 setup.py install --yes USE_AVX_INSTRUCTIONS
+    python3 setup.py install
 
-COPY . /root/py_face_recognition
-RUN cd /root/py_face_recognition && \
-    pip3 install -r requirements.txt
-CMD cd /root/py_face_recognition && \
-    python3 manage.py runserver 0.0.0.0:8000
+WORKDIR /usr/src/py_face_recognition
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+RUN pip install --upgrade pip
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY ./entrypoint.sh .
+
+COPY . .
+
+ENTRYPOINT ["/usr/src/py_face_recognition/entrypoint.sh"]
