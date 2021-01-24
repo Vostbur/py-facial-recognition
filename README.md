@@ -38,7 +38,7 @@ docker ps -a
 
 __Stop container__
 ```
-docker-compose down -v
+docker-compose down
 ```
 or
 ```
