@@ -40,6 +40,10 @@ __Stop container__
 ```
 docker-compose down
 ```
+for nginx
+```
+docker-compose down --remove-orphans
+```
 or
 ```
 docker stop CONTAINER ID 
