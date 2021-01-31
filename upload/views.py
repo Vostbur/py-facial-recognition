@@ -2,9 +2,11 @@ import base64
 import pickle
 from io import BytesIO
 
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -25,11 +27,12 @@ def check_image(image):
         np_array = pickle.loads(np_bytes)
 
         result = face_recognition.compare_faces(
-            [image_to_be_matched_encoded], np_array)
+            [image_to_be_matched_encoded], np_array
+        )
         if result[0]:
-            return True
+            return True, {'name': i.name}
 
-    return False
+    return False, {}
 
 
 @api_view(["POST", "GET"])
@@ -39,9 +42,25 @@ def upload_file(request):
         if form.is_valid():
             image_bytes = request.FILES["imgfile"].read()
             image = np.array(Image.open(BytesIO(image_bytes)))
-            if check_image(image):
-                return Response({}, status=status.HTTP_200_OK)
+
+            result, person = check_image(image)
+            if result:
+                return Response(person, status=status.HTTP_200_OK)
             return Response({}, status=status.HTTP_404_NOT_FOUND)
     else:
         form = UploadFileForm()
     return render(request, "index.html", {"form": form})
+
+
+class AuthPerson(APIView):
+    def get(self, request):
+        msg = 'Hello'
+        return HttpResponse(msg, content_type='text/plain')
+
+    def post(self, request):
+        image_bytes = request.data["imgfile"].read()
+        image = np.array(Image.open(BytesIO(image_bytes)))
+        result, person = check_image(image)
+        if result:
+            return Response(person, status=status.HTTP_200_OK)
+        return Response({}, status=status.HTTP_404_NOT_FOUND)

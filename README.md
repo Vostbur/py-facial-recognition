@@ -8,7 +8,14 @@ _Web-server for people verification by face recognition._
 
 ```
 docker-compose up -d --build
+docker-compose -f docker-compose.yml exec web python manage.py createsuperuser
 ```
+### Check with curl
+
+```
+curl -i -X POST -F "imgfile=@person-photo.jpg" http://localhost:8000/
+```
+---
 
 ### For production (server is availabled on port 1337)
 
@@ -18,7 +25,7 @@ docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --no
 docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
 docker-compose -f docker-compose.prod.yml exec web python manage.py createsuperuser
 ```
-
+---
 ### Usefull docker commands
 
 __Check logs__
@@ -87,7 +94,6 @@ __Prune docker system and remove all containers, images, volumes with one comman
 ```
 docker system prune -a
 ```
-
 ---
 ### Specification
 
@@ -97,6 +103,6 @@ Application server: __gunicorn__
 
 Front-end server: __nginx__
 
-DB: __PostgreSQL__, Redis (caсhing, _not implemented yet_)
+DB: __PostgreSQL__
 
 Recognition engine: __face_recognition__

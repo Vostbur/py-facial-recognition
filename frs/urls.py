@@ -18,6 +18,7 @@ from django.urls import path
 from upload import views
 
 urlpatterns = [
-    path('', views.upload_file),
+    path('', views.AuthPerson.as_view()),
+    path('upload/', views.upload_file),
     path('admin/', admin.site.urls),
 ]

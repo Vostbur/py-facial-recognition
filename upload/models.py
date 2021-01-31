@@ -25,3 +25,6 @@ class FaceImage(models.Model):
         face_hash = detect_face(self.image)
         self.face_hash = face_hash
         return super(FaceImage, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = 'Face'
