@@ -2,6 +2,17 @@
 
 _Web-server for people verification by face recognition._
 
+Min hardware requirements for *face_recognition* compilation: **2Gb** 
+RAM
+
+### URLs:
+
+`/` for POST requests
+
+`/upload` web-form for manual image upload
+
+`/admin` regular Django admin interface
+
 ---
 
 ### For develop (server is availabled on port 8000)
